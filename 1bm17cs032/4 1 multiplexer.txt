@@ -1,0 +1,39 @@
+
+4:1 Multiplexer
+
+module multiplexer4to1(do,din,en);
+input en;
+input [3:0]din;
+output [1:0] do;
+reg [1:0] do;
+always @ (en or din)
+begin
+	if(en)
+	begin
+	case(din)
+		4'b0001:do=2'b00;
+		4'b0010:do=2'b01;
+		4'b0100:do=2'b10;
+		4'b1000:do=2'b11;
+	default:do=2'bzz;
+	endcase
+	end
+end
+endmodule
+module multiplexer_tb;
+	reg [3:0]din;
+	reg en;
+	wire [1:0]do;
+	multiplexer4to1 mux(.do(do),.din(din),.en(en));
+	initial begin
+	$dumpfile("mux.vcd");
+	$dumpvars(0,multiplexer_tb);
+	en=1;
+	din=4'b0001;#100;
+	din=4'b0010;#100;
+	din=4'b0100;#100;
+	din=4'b1000;#100;
+	end
+endmodule
+
+ 

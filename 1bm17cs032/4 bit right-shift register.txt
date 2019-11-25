@@ -1,0 +1,38 @@
+4-bit Right Shift Register
+
+module rshiftreg(clk, clrb, sdr, q);
+//serial in, parallel out
+	input clk, clrb, sdr;
+	output reg [3:0] q;
+	always @(posedge(clk), negedge(clrb))
+		if(~clrb)
+			q <=4'b0000;
+		else
+			q <= {sdr, q[3:1]};
+endmodule
+
+module testmod;
+	reg clk, clrb, sdr;
+	wire [3:0] q;
+	
+	rshiftreg rs(clk, clrb, sdr, q);
+	initial
+	begin
+		$dumpfile("shift_reg.vcd");
+		$dumpvars(0, testmod);
+		clk = 1;
+		clrb = 0;
+		sdr = 1;
+		#100
+		clrb = 1;
+		sdr = 1;
+		#150
+		sdr = 0;
+		#200
+		$finish;
+	end
+	always #5 clk=~clk;
+endmodule
+
+
+
